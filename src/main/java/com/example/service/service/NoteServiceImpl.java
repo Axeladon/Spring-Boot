@@ -1,7 +1,7 @@
-package com.example.service;
+package com.example.service.service;
 
-import com.example.entity.Note;
-import com.example.repository.FakeDatabase;
+import com.example.data.entity.Note;
+import com.example.data.repository.FakeDatabase;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

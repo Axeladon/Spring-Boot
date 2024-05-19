@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo list</title>
+</head>
+<body>
+<h1>Edit note with ID: <span th:text="${noteId}"></span></h1>
+<div class="container">
+  <form action="/note/edit" method="post" class="container col-4">
+    <input type="hidden" name="id" th:value="${noteId}">
+    <div class="form-group mb-2">
+      <label for="title">Title</label>
+      <input type="text" name="title" class="form-control" id="title" placeholder="Enter Title" required>
+    </div>
+    <div class="form-group mb-2">
+      <label for="noteContent">Content</label>
+      <input type="text" name="content" class="form-control" id="noteContent" placeholder="Content" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+  </form>
+</div>
+</body>
+</html>

@@ -1,8 +1,8 @@
 package com.example;
 
-import com.example.entity.Note;
-import com.example.repository.FakeDatabase;
-import com.example.service.NoteServiceImpl;
+import com.example.data.entity.Note;
+import com.example.data.repository.FakeDatabase;
+import com.example.service.service.NoteServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

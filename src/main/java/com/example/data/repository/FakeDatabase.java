@@ -1,7 +1,7 @@
-package com.example.repository;
+package com.example.data.repository;
 
-import com.example.entity.Note;
-import com.example.util.IdGenerator;
+import com.example.data.entity.Note;
+import com.example.service.util.IdGenerator;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

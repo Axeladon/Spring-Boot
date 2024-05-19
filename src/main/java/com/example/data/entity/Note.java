@@ -1,11 +1,13 @@
-package com.example.entity;
+package com.example.data.entity;
 
+
+import jakarta.validation.constraints.NotBlank;
 
 public class Note {
     private Long id;
-
+    @NotBlank(message = "title cannot be empty")
     private String title;
-
+    @NotBlank(message = "content cannot be empty")
     private String content;
 
     public Note(String title, String content) {
