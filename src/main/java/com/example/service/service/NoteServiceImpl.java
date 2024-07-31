@@ -1,50 +1,51 @@
 package com.example.service.service;
 
-import com.example.data.entity.Note;
-import com.example.data.repository.FakeDatabase;
+import com.example.data.entity.NoteEntity;
+import com.example.data.repository.NoteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NoteServiceImpl implements NoteService {
+    @Autowired private NoteRepository noteRepository;
 
     private static final String EXCEPTION_TEXT = "Note does not found";
-    private final FakeDatabase fakeDatabase;
-    public NoteServiceImpl(FakeDatabase fakeDatabase) {
-        this.fakeDatabase = fakeDatabase;
-    }
     @Override
-    public List<Note> listAll() {
-        return fakeDatabase.getAllNotes();
+    public List<NoteEntity> listAll() {
+        return noteRepository.findAll();
     }
 
     @Override
-    public Note add(Note note) {
-        return fakeDatabase.createNote(note);
+    public NoteEntity add(NoteEntity note) {
+        return noteRepository.save(note);
     }
 
     @Override
     public void deleteById(long id) {
-        if (!fakeDatabase.deleteById(id)) {
+        if (!noteRepository.existsById(id)) {
             throw new RuntimeException(EXCEPTION_TEXT);
         }
+        noteRepository.deleteById(id);
     }
 
     @Override
-    public void update(Note note) {
-        if (!fakeDatabase.update(note)) {
+    public void update(NoteEntity note) {
+        if (!noteRepository.existsById(note.getId())) {
             throw new RuntimeException(EXCEPTION_TEXT);
         }
+        noteRepository.save(note);
     }
 
     @Override
-    public Note getById(long id) {
-        Note note = fakeDatabase.getById(id);
-        if (note == null) {
-            throw new RuntimeException(EXCEPTION_TEXT);
+    public NoteEntity getById(long id) {
+        Optional<NoteEntity> note = noteRepository.findById(id);
+        if (note.isPresent()) {
+            return note.get();
         } else {
-            return note;
+            throw new RuntimeException(EXCEPTION_TEXT);
         }
     }
 }

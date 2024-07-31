@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import com.example.data.repository.FakeDatabase;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,16 +1,24 @@
 package com.example.data.entity;
 
-
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
-public class Note {
+@Entity
+@Table(name = "note")
+public class NoteEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "title cannot be empty")
     private String title;
     @NotBlank(message = "content cannot be empty")
     private String content;
 
-    public Note(String title, String content) {
+    public NoteEntity() {
+
+    }
+
+    public NoteEntity(String title, String content) {
         this.title = title;
         this.content = content;
     }

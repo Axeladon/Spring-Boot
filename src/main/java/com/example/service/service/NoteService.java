@@ -1,13 +1,13 @@
 package com.example.service.service;
 
-import com.example.data.entity.Note;
+import com.example.data.entity.NoteEntity;
 
 import java.util.List;
 
 public interface NoteService {
-    List<Note> listAll();
-    Note add(Note note);
+    List<NoteEntity> listAll();
+    NoteEntity add(NoteEntity note);
     void deleteById(long id);
-    void update(Note note);
-    Note getById(long id);
+    void update(NoteEntity note);
+    NoteEntity getById(long id);
 }

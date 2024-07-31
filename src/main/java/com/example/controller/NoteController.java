@@ -1,10 +1,9 @@
 package com.example.controller;
 
-import com.example.data.entity.Note;
+import com.example.data.entity.NoteEntity;
 import com.example.service.service.NoteService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,14 +25,14 @@ public class NoteController {
 
     @GetMapping("note/list")
     public ModelAndView getNoteList() {
-        List<Note> noteList = noteService.listAll();
+        List<NoteEntity> noteList = noteService.listAll();
         ModelAndView modelAndView = new ModelAndView("note/getList");
         modelAndView.addObject("notes", noteList);
         return modelAndView;
     }
 
     @PostMapping("note/create")
-    public String createNote(@Valid Note note, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String createNote(@Valid NoteEntity note, BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("validationErrors", result.getAllErrors());
         } else {
@@ -57,7 +56,7 @@ public class NoteController {
     }
 
     @PostMapping("note/edit")
-    public String editNote(@ModelAttribute Note note) {
+    public String editNote(@ModelAttribute NoteEntity note) {
         noteService.update(note);
         return REDIRECT_TO_LIST;
     }

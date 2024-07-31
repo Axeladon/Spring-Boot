@@ -1,79 +1,95 @@
 package com.example;
 
-import com.example.data.entity.Note;
-import com.example.data.repository.FakeDatabase;
+import com.example.data.entity.NoteEntity;
+import com.example.data.repository.NoteRepository;
 import com.example.service.service.NoteServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class NoteServiceImplTest {
+
+    @Autowired
     private NoteServiceImpl noteService;
+
+    @Autowired
+    private NoteRepository noteRepository;
+
+    private NoteEntity note1;
+    private NoteEntity note2;
+    private NoteEntity note3;
 
     @BeforeEach
     public void setUp() {
-        FakeDatabase fakeDatabase = new FakeDatabase();
-        noteService = new NoteServiceImpl(fakeDatabase);
+        noteRepository.deleteAll();
 
-        noteService.add(new Note("John", "Meeting notes"));
-        noteService.add(new Note("Alice", "Task list"));
-        noteService.add(new Note("Bob", "Project ideas"));
+        note1 = noteService.add(new NoteEntity("John", "Meeting notes"));
+        note2 = noteService.add(new NoteEntity("Alice", "Task list"));
+        note3 = noteService.add(new NoteEntity("Bob", "Project ideas"));
     }
 
     @Test
     void testAdd() {
-        Note noteToAdd = new Note("Albert", "Home work");
-        Note addedNote = noteService.add(noteToAdd);
-        assertEquals(noteToAdd, addedNote);
+        NoteEntity noteToAdd = new NoteEntity("Albert", "Home work");
+        NoteEntity addedNote = noteService.add(noteToAdd);
+        assertNotNull(addedNote.getId());
+        assertEquals(noteToAdd.getTitle(), addedNote.getTitle());
+        assertEquals(noteToAdd.getContent(), addedNote.getContent());
     }
 
     @Test
     void testListAll() {
-        List<Note> allNotes = noteService.listAll();
+        List<NoteEntity> allNotes = noteService.listAll();
         assertEquals(3, allNotes.size());
     }
 
     @Test
-    void testDeleteByIdShouldThrowsNotFoundException() {
-        assertThrows(RuntimeException.class, () -> noteService.deleteById(4));
+    void testDeleteByIdShouldThrowNotFoundException() {
+        assertThrows(RuntimeException.class, () -> noteService.deleteById(999L));
     }
 
     @Test
     void testDeleteById() {
-        List<Note> allNotesBeforeDelete = noteService.listAll();
+        List<NoteEntity> allNotesBeforeDelete = noteService.listAll();
         assertEquals(3, allNotesBeforeDelete.size());
 
-        noteService.deleteById(2);
+        noteService.deleteById(note2.getId());
 
-        List<Note> allNotesAfterDelete = noteService.listAll();
+        List<NoteEntity> allNotesAfterDelete = noteService.listAll();
         assertEquals(2, allNotesAfterDelete.size());
     }
 
     @Test
-    void testUpdateShouldThrowsNotFoundException() {
-        Note noteToUpdate = new Note("Albert", "Home work");
+    void testUpdateShouldThrowNotFoundException() {
+        NoteEntity noteToUpdate = new NoteEntity("Albert", "Home work");
+        noteToUpdate.setId(999L); //set a non-existent ID
         assertThrows(RuntimeException.class, () -> noteService.update(noteToUpdate));
     }
 
     @Test
     void testUpdate() {
-        Note noteToUpdate = noteService.getById(2);
-        noteToUpdate.setContent("New context");
+        NoteEntity noteToUpdate = noteService.getById(note2.getId());
+        noteToUpdate.setContent("New content");
         noteService.update(noteToUpdate);
-        assertEquals(noteService.getById(2), noteToUpdate);
+        assertEquals("New content", noteService.getById(note2.getId()).getContent());
     }
 
     @Test
-    void testGetByIdShouldThrowsNotFoundException() {
-        assertThrows(RuntimeException.class, () -> noteService.getById(4));
+    void testGetByIdShouldThrowNotFoundException() {
+        assertThrows(RuntimeException.class, () -> noteService.getById(999L));
     }
 
     @Test
     void testGetById() {
-        Note node = noteService.getById(2);
-        assertEquals(noteService.listAll().get(1), node);
+        NoteEntity note = noteService.getById(note2.getId());
+        assertEquals(note2.getId(), note.getId());
     }
 }
